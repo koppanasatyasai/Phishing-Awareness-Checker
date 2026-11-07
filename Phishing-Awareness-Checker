@@ -1,0 +1,35 @@
+from urllib.parse import urlparse
+
+def check_url(url):
+    suspicious_words = [
+        "login", "verify", "password",
+        "free", "claim", "update"
+    ]
+
+    parsed = urlparse(url)
+    warnings = []
+
+    if parsed.scheme != "https":
+        warnings.append("No HTTPS connection")
+
+    if "@" in parsed.netloc:
+        warnings.append("Contains @ symbol")
+
+    if len(url) > 100:
+        warnings.append("Unusually long URL")
+
+    for word in suspicious_words:
+        if word in url.lower():
+            warnings.append("Suspicious keyword: " + word)
+
+    if warnings:
+        print("\nWarning signs found:")
+        for warning in warnings:
+            print("-", warning)
+    else:
+        print("No basic warning signs detected.")
+
+    print("This is not a guarantee that the URL is safe.")
+
+url = input("Enter URL: ")
+check_url(url)
